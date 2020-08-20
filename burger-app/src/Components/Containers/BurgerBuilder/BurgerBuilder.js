@@ -66,6 +66,13 @@ class BurgerBuilder extends Component {
     this.setState({ buying: true });
   };
 
+  modalClosedHandler = () => {
+    this.setState({ buying: false });
+  };
+  modalContinueHandler = () => {
+    alert("continue");
+  };
+
   render() {
     console.log("BurgerBuilder.js", this.state.ingredients);
 
@@ -77,8 +84,13 @@ class BurgerBuilder extends Component {
 
     return (
       <Aux>
-        <Modal show={this.state.buying}>
-          <OrderSummary ingredients={this.state.ingredients} />
+        <Modal show={this.state.buying} modalClosed={this.modalClosedHandler}>
+          <OrderSummary
+            ingredients={this.state.ingredients}
+            clicked={this.modalClosedHandler}
+            continue={this.modalContinueHandler}
+            price={this.state.totalPrice}
+          />
         </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls

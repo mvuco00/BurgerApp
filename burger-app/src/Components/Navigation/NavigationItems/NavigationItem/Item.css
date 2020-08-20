@@ -1,0 +1,45 @@
+.Item {
+  margin: 10px 0;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+}
+
+.Item a {
+  color: rgb(93, 55, 4);
+  width: 100%;
+  text-decoration: none;
+  display: block;
+  box-sizing: border-box;
+}
+
+.Item a:hover,
+.Item a:active,
+.Item a.active {
+  color: rgba(37, 60, 187, 0.808);
+}
+
+@media (min-width: 500px) {
+  .Item {
+    margin: 0;
+    display: flex;
+    height: 100%;
+    width: auto;
+    align-items: center;
+  }
+
+  .Item a {
+    color: white;
+    height: 100%;
+    border-bottom: 1px solid transparent;
+    padding: 16px 10px;
+  }
+
+  .Item a:hover,
+  .Item a:active,
+  .Item a.active {
+    background-color: rgba(255, 140, 0, 0.15);
+    border-bottom: 2px solid darkgray;
+    color: white;
+  }
+}

@@ -9,9 +9,9 @@ import Spinner from "../../UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/ErrorHandler/withErrorHandler";
 
 const INGREDIENT_PRICES = {
-  salad: 1.1,
+  salad: 1,
   bacon: 2,
-  meat: 6.5,
+  meat: 6,
   cheese: 3,
 };
 
@@ -81,6 +81,7 @@ class BurgerBuilder extends Component {
   };
   modalContinueHandler = () => {
     //alert("continue");
+    /*
     this.setState({ loading: true });
     const order = {
       ingredients: this.state.ingredients,
@@ -97,6 +98,22 @@ class BurgerBuilder extends Component {
       .post("/orders", order)
       .then((response) => this.setState({ loading: false, buying: false }))
       .catch((err) => this.setState({ loading: false, buying: false }));
+      */
+
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingredients[i])
+      ); //property name + value
+    }
+    queryParams.push("price=" + this.state.totalPrice);
+    const queryString = queryParams.join("&");
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryString,
+    });
   };
 
   render() {

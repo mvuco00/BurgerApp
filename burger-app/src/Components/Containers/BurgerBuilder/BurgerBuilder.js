@@ -8,15 +8,14 @@ import axios from "../../../axios-orders";
 import Spinner from "../../UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/ErrorHandler/withErrorHandler";
 import { connect } from "react-redux";
-import * as actionTypes from "../../../store/actions";
+import * as actionTypes from "../../../store/actions/index";
 
 class BurgerBuilder extends Component {
   state = {
     buying: false,
-    loading: false,
-    error: false,
   };
   componentDidMount() {
+    this.props.onInitIngredients();
     /*
     axios
       .get("https://myburger-ddfc6.firebaseio.com/ingredients.json")
@@ -40,6 +39,7 @@ class BurgerBuilder extends Component {
     this.setState({ buying: true });
   };
   modalContinueHandler = () => {
+    this.props.buyInit();
     this.props.history.push("/checkout");
   };
 
@@ -55,7 +55,7 @@ class BurgerBuilder extends Component {
     }
     let orderSummary = null;
 
-    let burger = this.state.error ? (
+    let burger = this.props.error ? (
       <p>Ingredients cant be loaded</p>
     ) : (
       <Spinner />
@@ -84,9 +84,7 @@ class BurgerBuilder extends Component {
         />
       );
     }
-    if (this.state.loading) {
-      orderSummary = <Spinner />;
-    }
+
     return (
       <Aux>
         <Modal show={this.state.buying} modalClosed={this.modalClosedHandler}>
@@ -100,18 +98,19 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingredients,
-    price: state.totalPrice,
-    buyable: state.buyable,
+    ings: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    buyable: state.burgerBuilder.buyable,
+    error: state.burgerBuilder.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onIngredientAdded: (name) =>
-      dispatch({ type: actionTypes.ADD_INGREDIENTS, ingredientName: name }),
-    onIngredientRemoved: (name) =>
-      dispatch({ type: actionTypes.REMOVE_INGREDIENTS, ingredientName: name }),
+    onIngredientAdded: (name) => dispatch(actionTypes.addIngredient(name)),
+    onIngredientRemoved: (name) => dispatch(actionTypes.removeIngredient(name)),
+    onInitIngredients: () => dispatch(actionTypes.initIngredients()),
+    buyInit: () => dispatch(actionTypes.buy_init()),
   };
 };
 

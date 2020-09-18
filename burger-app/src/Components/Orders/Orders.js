@@ -2,38 +2,40 @@ import React, { Component } from "react";
 import Order from "../../Components/Order/Order";
 import axios from "../../axios-orders";
 import withErrorHandler from "../hoc/ErrorHandler/withErrorHandler";
+import { connect } from "react-redux";
+import * as actions from "../../store/actions/index";
+import Spinner from "../UI/Spinner/Spinner";
 
 class Orders extends Component {
-  state = {
-    orders: [],
-    loading: true,
-  };
   componentDidMount() {
-    axios
-      .get("/orders.json")
-      .then((response) => {
-        const fetchedOrders = [];
-        //zelimo object pretvorit u array
-        for (let key in response.data) {
-          //u array pushamo object ciji key gledamo, ali usput cemo spreadat sve njegove propertije, i dodat cemo tom novom objektu id
-          fetchedOrders.push({ ...response.data[key], id: key });
-        }
-        this.setState({ loading: false, orders: fetchedOrders });
-      })
-      .catch((err) => this.setState({ loading: false }));
+    this.props.order_init(this.props.token);
   }
 
   render() {
-    const orderArray = [...this.state.orders];
-
-    return (
-      <div>
-        {orderArray.map((el) => (
-          <Order key={el.id} ingredients={el.ingredients} price={+el.price} />
-        ))}
-      </div>
-    );
+    const orderArray = [...this.props.orders];
+    let orders = <Spinner />;
+    if (!this.props.loading) {
+      orders = orderArray.map((el) => (
+        <Order key={el.id} ingredients={el.ingredients} price={+el.price} />
+      ));
+    }
+    return <div>{orders}</div>;
   }
 }
 
-export default withErrorHandler(Orders, axios);
+const mapStateToProps = (state) => {
+  return {
+    orders: state.order.orders,
+    loading: state.order.loading,
+    token: state.auth.token,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    order_init: (token) => dispatch(actions.order_init(token)),
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(Orders, axios));

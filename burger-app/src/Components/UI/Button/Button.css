@@ -1,7 +1,7 @@
 .Button {
   background-color: transparent;
   border: none;
-  color: white;
+  color: rgb(68, 196, 57);
   outline: none;
   cursor: pointer;
   font: inherit;
@@ -24,5 +24,5 @@
 }
 
 .Button:disabled {
-  color: #ccc;
+  color: aquamarine;
 }

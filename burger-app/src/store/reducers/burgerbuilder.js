@@ -1,4 +1,5 @@
 import * as actionTypes from "../actions/actionTypes";
+import { updateObjects } from "../utility";
 
 const initialState = {
   ingredients: null,
@@ -16,27 +17,33 @@ const INGREDIENT_PRICES = {
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.ADD_INGREDIENTS:
-      return {
-        ...state,
-        ingredients: {
-          ...state.ingredients,
-          [action.ingredientName]: state.ingredients[action.ingredientName] + 1,
-        },
+      const updatedIngredient = {
+        [action.ingredientName]: state.ingredients[action.ingredientName] + 1,
+      };
+      const updatedIngredients = updateObjects(
+        state.ingredients,
+        updatedIngredient
+      );
+      const updatedState = {
+        ingredients: updatedIngredients,
         totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
         buyable: true,
       };
+      return updateObjects(state, updatedState);
     case actionTypes.REMOVE_INGREDIENTS:
-      return {
-        ...state,
-        ingredients: {
-          ...state.ingredients,
-          [action.ingredientName]: state.ingredients[action.ingredientName] - 1,
-        },
+      const updatedIngr = {
+        [action.ingredientName]: state.ingredients[action.ingredientName] - 1,
+      };
+      const updatedIngrd = updateObjects(state.ingredients, updatedIngr);
+      const updatedSt = {
+        ingredients: updatedIngrd,
         totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
         buyable: true,
       };
+      return updateObjects(state, updatedSt);
+
     case actionTypes.SET_INGREDIENTS:
-      return {
+      return updateObjects(state, {
         ...state,
         ingredients: {
           salad: action.ingredients.salad,
@@ -46,12 +53,10 @@ const rootReducer = (state = initialState, action) => {
         },
         totalPrice: 4,
         error: false,
-      };
+      });
+
     case actionTypes.FETCH_INGREDIENT_FAILED:
-      return {
-        ...state,
-        error: true,
-      };
+      return updateObjects(state, { error: true });
     default:
       return state;
   }

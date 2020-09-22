@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import Spinner from "../../UI/Spinner/Spinner";
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
@@ -41,6 +42,11 @@ class Auth extends Component {
     isSignup: true,
   };
 
+  componentDidMount() {
+    if (!this.props.buildingBurger && this.props.authRedirectPath) {
+      this.props.setAuthRedirectPath();
+    }
+  }
   checkValidity(value, rules) {
     let isValid = true;
     if (!rules) {
@@ -135,9 +141,14 @@ class Auth extends Component {
       //error iz firebasea je js objekt koji ima message property
       errorMsg = <p>{this.props.error.message}</p>;
     }
+    let authRedirect = null;
+    if (this.props.isAuth) {
+      authRedirect = <Redirect to={this.props.authRedirect} />;
+    }
 
     return (
       <div className={classes.Auth}>
+        {authRedirect}
         {errorMsg}
         <form onSubmit={this.submitHandler}>
           {form}
@@ -155,6 +166,9 @@ const mapStateToProps = (state) => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
+    isAuth: state.auth.token !== null,
+    buildingBurger: state.burgerBuilder.building,
+    authRedirect: state.auth.authRedirectPath,
   };
 };
 
@@ -162,6 +176,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     toAuth: (email, password, isSignup) =>
       dispatch(actions.auth(email, password, isSignup)),
+    onSetRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
   };
 };
 

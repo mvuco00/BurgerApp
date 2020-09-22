@@ -36,7 +36,12 @@ class BurgerBuilder extends Component {
   }
 
   showModalHandler = () => {
-    this.setState({ buying: true });
+    if (this.props.isAuth) {
+      this.setState({ buying: true });
+    } else {
+      this.props.onSetRedirect("/checkout");
+      this.props.history.push("/auth");
+    }
   };
   modalContinueHandler = () => {
     this.props.buyInit();
@@ -72,6 +77,7 @@ class BurgerBuilder extends Component {
             price={this.props.price}
             buy={this.props.buyable}
             buying={this.showModalHandler}
+            isAuth={this.props.isAuth}
           />
         </Aux>
       );
@@ -102,6 +108,7 @@ const mapStateToProps = (state) => {
     price: state.burgerBuilder.totalPrice,
     buyable: state.burgerBuilder.buyable,
     error: state.burgerBuilder.error,
+    isAuth: state.auth.token !== null,
   };
 };
 
@@ -111,6 +118,7 @@ const mapDispatchToProps = (dispatch) => {
     onIngredientRemoved: (name) => dispatch(actionTypes.removeIngredient(name)),
     onInitIngredients: () => dispatch(actionTypes.initIngredients()),
     buyInit: () => dispatch(actionTypes.buy_init()),
+    onSetRedirect: (path) => dispatch(actionTypes.setAuthRedirectPath(path)),
   };
 };
 

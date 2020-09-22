@@ -62,11 +62,14 @@ export const orders_start = () => {
   };
 };
 
-export const order_init = (token) => {
+export const order_init = (token, userId) => {
   return (dispatch) => {
     dispatch(orders_start());
+    const queryParams =
+      "?auth=" + token + '&orderBy="userId"&equalTo="' + userId + '"';
+
     axios
-      .get("/orders.json?auth=" + token)
+      .get("/orders.json" + queryParams)
       .then((response) => {
         const fetchedOrders = [];
         //zelimo object pretvorit u array

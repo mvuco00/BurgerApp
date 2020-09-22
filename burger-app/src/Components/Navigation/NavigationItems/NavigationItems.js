@@ -5,8 +5,13 @@ import Item from "../NavigationItems/NavigationItem/NavigationItem";
 const NavigationItems = (props) => (
   <ul className={classes.NavItems}>
     <Item link="/">Home</Item>
-    <Item link="/orders">Orders</Item>
-    <Item link="/auth">Auth</Item>
+    {props.isAuth ? <Item link="/orders">Orders</Item> : null}
+
+    {props.isAuth ? (
+      <Item link="/logout">Log out</Item>
+    ) : (
+      <Item link="/auth">Auth</Item>
+    )}
   </ul>
 );
 

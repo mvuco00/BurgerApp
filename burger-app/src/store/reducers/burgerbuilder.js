@@ -6,6 +6,7 @@ const initialState = {
   totalPrice: 4,
   buyable: false,
   error: false,
+  building: false,
 };
 const INGREDIENT_PRICES = {
   salad: 1,
@@ -28,6 +29,7 @@ const rootReducer = (state = initialState, action) => {
         ingredients: updatedIngredients,
         totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
         buyable: true,
+        building: true,
       };
       return updateObjects(state, updatedState);
     case actionTypes.REMOVE_INGREDIENTS:
@@ -39,6 +41,7 @@ const rootReducer = (state = initialState, action) => {
         ingredients: updatedIngrd,
         totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
         buyable: true,
+        building: true,
       };
       return updateObjects(state, updatedSt);
 
@@ -53,6 +56,7 @@ const rootReducer = (state = initialState, action) => {
         },
         totalPrice: 4,
         error: false,
+        building: false,
       });
 
     case actionTypes.FETCH_INGREDIENT_FAILED:

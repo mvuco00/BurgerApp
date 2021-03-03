@@ -1,15 +1,17 @@
 import axios from "axios";
 import * as actionTypes from "./actionTypes";
+import dotenv from "dotenv";
+dotenv.config();
 
 var firebaseConfig = {
-  apiKey: "AIzaSyCY909lSawupOSVy9qQupZZMt3LO7aKxvI",
-  authDomain: "myburger-ddfc6.firebaseapp.com",
-  databaseURL: "https://myburger-ddfc6.firebaseio.com",
-  projectId: "myburger-ddfc6",
-  storageBucket: "myburger-ddfc6.appspot.com",
-  messagingSenderId: "1040371845877",
-  appId: "1:1040371845877:web:12c749f667e57322add3bc",
-  measurementId: "G-EBVE4NB99F",
+  apiKey: process.env.APIKEY,
+  authDomain: process.env.AUTHDOMAIN,
+  databaseURL: process.env.DATABASEURL,
+  projectId: process.env.PROJECTID,
+  storageBucket: process.env.STORAGEBUCKET,
+  messagingSenderId: process.env.SENDERID,
+  appId: process.env.APPID,
+  measurementId: process.env.MEASUREMENTID,
 };
 
 export const authStart = () => {
